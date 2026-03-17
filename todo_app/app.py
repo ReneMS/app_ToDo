@@ -171,17 +171,115 @@ def index() -> rx.Component:
         ),
         rx.box(
             rx.container(
-                rx.hstack(
-                    rx.text("2026 TaskFlow", color="gray.500"),
-                    rx.spacer(),
-                    rx.text("Python + Reflex", color="gray.600"),
+                rx.vstack(
+                    rx.grid(
+                        rx.box(
+                            rx.vstack(
+                                rx.heading(
+                                    "TaskFlow",
+                                    size="5",
+                                    font_weight="bold",
+                                    color="white",
+                                ),
+                                rx.text(
+                                    "Organiza tu vida con IA",
+                                    color="gray.400",
+                                    font_size="sm",
+                                ),
+                                spacing="2",
+                            ),
+                            col_span="2",
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.heading(
+                                    "Producto",
+                                    size="3",
+                                    font_weight="semibold",
+                                    color="white",
+                                ),
+                                rx.link(
+                                    rx.text(
+                                        "Características",
+                                        color="gray.400",
+                                        font_size="sm",
+                                    ),
+                                    href="#",
+                                ),
+                                rx.link(
+                                    rx.text(
+                                        "Precios", color="gray.400", font_size="sm"
+                                    ),
+                                    href="#",
+                                ),
+                                spacing="2",
+                            ),
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.heading(
+                                    "Recursos",
+                                    size="3",
+                                    font_weight="semibold",
+                                    color="white",
+                                ),
+                                rx.link(
+                                    rx.text("Docs", color="gray.400", font_size="sm"),
+                                    href="#",
+                                ),
+                                rx.link(
+                                    rx.text("Blog", color="gray.400", font_size="sm"),
+                                    href="#",
+                                ),
+                                spacing="2",
+                            ),
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.heading(
+                                    "Legal",
+                                    size="3",
+                                    font_weight="semibold",
+                                    color="white",
+                                ),
+                                rx.link(
+                                    rx.text(
+                                        "Privacidad", color="gray.400", font_size="sm"
+                                    ),
+                                    href="#",
+                                ),
+                                rx.link(
+                                    rx.text(
+                                        "Términos", color="gray.400", font_size="sm"
+                                    ),
+                                    href="#",
+                                ),
+                                spacing="2",
+                            ),
+                        ),
+                        columns="4",
+                        spacing="8",
+                    ),
+                    rx.box(
+                        rx.text("© 2026 TaskFlow", color="gray.500", font_size="sm"),
+                        rx.text(
+                            "Hecho con Python + Reflex",
+                            color="gray.600",
+                            font_size="sm",
+                        ),
+                        border_top="1px solid",
+                        border_color="gray.800",
+                        pt="6",
+                        mt="8",
+                        width="100%",
+                    ),
+                    spacing="8",
                 ),
                 max_width="1200px",
             ),
             bg="gray.950",
-            py="6",
-            border_top="1px solid",
-            border_color="gray.800",
+            py="12",
+            px="6",
         ),
     )
 
