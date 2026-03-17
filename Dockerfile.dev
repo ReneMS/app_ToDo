@@ -1,0 +1,30 @@
+# Dockerfile para desarrollo
+FROM python:3.12-slim
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin:$PATH"
+
+# Crear directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de configuración
+COPY pyproject.toml uv.lock ./
+
+# Instalar dependencias Python
+RUN uv sync
+
+# Copiar código fuente
+COPY . .
+
+# Exponer puertos
+EXPOSE 3000 8000
+
+# Comando por defecto
+CMD ["uv", "run", "reflex", "dev", "--port", "3000"]
