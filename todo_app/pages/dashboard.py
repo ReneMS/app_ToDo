@@ -69,7 +69,7 @@ def dashboard_page() -> rx.Component:
             padding="4",
         ),
         rx.box(
-            rx.foreach(Estado.tareas.to(list[Tarea]), tarea_item),
+            rx.foreach(Estado.tareas, tarea_item),
             padding="4",
             spacing="3",
         ),

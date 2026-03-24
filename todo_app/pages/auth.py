@@ -6,26 +6,6 @@ import reflex as rx
 from todo_app.states.estado import Estado
 
 
-class LoginState(rx.State):
-    username: str = ""
-    password: str = ""
-    auto_setters = True
-
-    def submit(self):
-        Estado.iniciar_sesion(self.username, self.password)
-
-
-class RegisterState(rx.State):
-    username: str = ""
-    email: str = ""
-    password: str = ""
-    nombre: str = ""
-    auto_setters = True
-
-    def submit(self):
-        Estado.registrar(self.username, self.email, self.password, self.nombre)
-
-
 def login_page() -> rx.Component:
     return rx.box(
         rx.center(
@@ -38,8 +18,8 @@ def login_page() -> rx.Component:
                             rx.text("Usuario o email", size="1", font_weight="medium"),
                             rx.input(
                                 placeholder="tu@email.com",
-                                value=LoginState.username,
-                                on_change=LoginState.set_username,
+                                value=Estado.login_username,
+                                on_change=Estado.set_login_username,
                                 width="100%",
                             ),
                             spacing="1",
@@ -52,8 +32,8 @@ def login_page() -> rx.Component:
                             rx.input(
                                 type="password",
                                 placeholder="********",
-                                value=LoginState.password,
-                                on_change=LoginState.set_password,
+                                value=Estado.login_password,
+                                on_change=Estado.set_login_password,
                                 width="100%",
                             ),
                             spacing="1",
@@ -62,7 +42,7 @@ def login_page() -> rx.Component:
                     ),
                     rx.button(
                         "Iniciar sesion",
-                        on_click=LoginState.submit,
+                        on_click=Estado.iniciar_sesion,
                         width="100%",
                         color_scheme="indigo",
                     ),
@@ -108,8 +88,8 @@ def register_page() -> rx.Component:
                                 rx.text("Nombre", size="1", font_weight="medium"),
                                 rx.input(
                                     placeholder="Juan",
-                                    value=RegisterState.nombre,
-                                    on_change=RegisterState.set_nombre,
+                                    value=Estado.register_nombre,
+                                    on_change=Estado.set_register_nombre,
                                     width="100%",
                                 ),
                                 spacing="1",
@@ -121,8 +101,8 @@ def register_page() -> rx.Component:
                                 rx.text("Usuario", size="1", font_weight="medium"),
                                 rx.input(
                                     placeholder="juan123",
-                                    value=RegisterState.username,
-                                    on_change=RegisterState.set_username,
+                                    value=Estado.register_username,
+                                    on_change=Estado.set_register_username,
                                     width="100%",
                                 ),
                                 spacing="1",
@@ -137,8 +117,8 @@ def register_page() -> rx.Component:
                             rx.input(
                                 type="email",
                                 placeholder="tu@email.com",
-                                value=RegisterState.email,
-                                on_change=RegisterState.set_email,
+                                value=Estado.register_email,
+                                on_change=Estado.set_register_email,
                                 width="100%",
                             ),
                             spacing="1",
@@ -151,8 +131,8 @@ def register_page() -> rx.Component:
                             rx.input(
                                 type="password",
                                 placeholder="********",
-                                value=RegisterState.password,
-                                on_change=RegisterState.set_password,
+                                value=Estado.register_password,
+                                on_change=Estado.set_register_password,
                                 width="100%",
                             ),
                             spacing="1",
@@ -161,7 +141,7 @@ def register_page() -> rx.Component:
                     ),
                     rx.button(
                         "Crear cuenta",
-                        on_click=RegisterState.submit,
+                        on_click=Estado.registrar,
                         width="100%",
                         color_scheme="indigo",
                     ),

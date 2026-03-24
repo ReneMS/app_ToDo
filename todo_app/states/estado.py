@@ -6,6 +6,7 @@ import reflex as rx
 from typing import List
 from passlib.context import CryptContext
 from sqlmodel import select, desc
+from todo_app.models.tarea import Tarea
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -20,13 +21,22 @@ class Estado(rx.State):
     mensaje_error: str = ""
 
     # Tareas
-    tareas: list = []
+    tareas: list[Tarea] = []
     filtro: str = "todas"
 
-    # Formulario
+    # Formulario de tareas
     titulo: str = ""
     descripcion: str = ""
     prioridad: str = "media"
+
+    # Formulario de autenticación
+    login_username: str = ""
+    login_password: str = ""
+    register_username: str = ""
+    register_email: str = ""
+    register_password: str = ""
+    register_nombre: str = ""
+    mensaje_exito: str = ""
 
     # Setters explícitos (requeridos en Reflex 0.8.9+)
     def set_titulo(self, value: str):
@@ -38,13 +48,33 @@ class Estado(rx.State):
     def set_prioridad(self, value: str):
         self.prioridad = value
 
+    def set_login_username(self, value: str):
+        self.login_username = value
+
+    def set_login_password(self, value: str):
+        self.login_password = value
+
+    def set_register_username(self, value: str):
+        self.register_username = value
+
+    def set_register_email(self, value: str):
+        self.register_email = value
+
+    def set_register_password(self, value: str):
+        self.register_password = value
+
+    def set_register_nombre(self, value: str):
+        self.register_nombre = value
+
     def hash_password(self, password: str) -> str:
         return pwd_context.hash(password)
 
     def verificar_password(self, password: str, password_hash: str) -> bool:
         return pwd_context.verify(password, password_hash)
 
-    def iniciar_sesion(self, username: str, password: str):
+    def iniciar_sesion(self):
+        username = self.login_username
+        password = self.login_password
         from todo_app.models.usuario import Usuario
 
         self.mensaje_error = ""
@@ -71,11 +101,18 @@ class Estado(rx.State):
             self.usuario_id = usuario.id  # type: ignore
             self.username = usuario.username
             self.esta_autenticado = True
+            self.login_username = ""
+            self.login_password = ""
+            self.mensaje_error = ""
 
         self.cargar_tareas()
         rx.redirect("/dashboard")
 
-    def registrar(self, username: str, email: str, password: str, nombre: str):
+    def registrar(self):
+        username = self.register_username
+        email = self.register_email
+        password = self.register_password
+        nombre = self.register_nombre
         from todo_app.models.usuario import Usuario
 
         self.mensaje_error = ""
@@ -84,12 +121,23 @@ class Estado(rx.State):
             self.mensaje_error = "Usuario debe tener al menos 3 caracteres"
             return
 
+        if len(password) < 6:
+            self.mensaje_error = "La contraseña debe tener al menos 6 caracteres"
+            return
+
         with rx.session() as session:
             existe = session.exec(
                 select(Usuario).where(Usuario.username == username)
             ).first()
             if existe:
-                self.mensaje_error = "Usuario ya existe"
+                self.mensaje_error = "El nombre de usuario ya está en uso"
+                return
+
+            email_existe = session.exec(
+                select(Usuario).where(Usuario.email == email)
+            ).first()
+            if email_existe:
+                self.mensaje_error = "El correo electrónico ya está registrado"
                 return
 
             nuevo = Usuario(
@@ -104,6 +152,11 @@ class Estado(rx.State):
             self.usuario_id = nuevo.id  # type: ignore
             self.username = nuevo.username
             self.esta_autenticado = True
+            self.register_username = ""
+            self.register_email = ""
+            self.register_password = ""
+            self.register_nombre = ""
+            self.mensaje_error = ""
 
         self.cargar_tareas()
         rx.redirect("/dashboard")
